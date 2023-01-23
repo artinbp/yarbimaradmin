@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.btn{
+    @apply w-24 bg-blue-300;
+}
+.rtl{
+    direction: rtl;
+    text-align: right;
+}
+.ltr{
+    direction: ltr;
+    text-align: left;
+}
+#app{
+    @apply bg-gray-900 absolute w-full h-full
+}
+
+nav a {
+    font-weight: bold;
+    color: #bbb;
+}
+
+nav a.router-link-exact-active {
+    color: #eee;
+}

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import dataSite  from '@/config'
-import {useRouter} from 'vue-router';
-const router = useRouter()
-const users = {
+import userError from './error'
+const token = sessionStorage.getItem('token')
+const user = {
     state: {
         userInfo: {
-            id:null,
-            name:"",
+            id:1,
+            name:"artin",
             username:"",
             email:"",
             number:"",
@@ -16,7 +16,6 @@ const users = {
             password:"",
             status:"",
             token:""
-
         },
         token: ''
     },
@@ -49,16 +48,52 @@ const users = {
                 }
             }).then((res) => {
                 console.log(res)
-                commit('setUserToken', res.data.token)
-                localStorage.setItem('token', res.data.token)
-                router.push('/')
-            }).catch((error) => {
+                if (res.data.token){
+                    commit('setUserToken', res.data.token)
+                    sessionStorage.setItem('token', res.data.token)
+                }
 
+
+            }).catch((error) => {
+                commit('setUserError',{
+                    title: error.message,
+                    code: error.status,
+                    desc: error.response.data.message,
+                    type: 'error',
+                    status: true
+                })
                 console.log(error,dataSite.requestUrl + '/auth/login')
+            })
+        },
+        generateUserInfo: ({ commit }) => {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            axios.get(dataSite.requestUrl + '/auth/user', {
+                header: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + token
+                }
+            }).then((res) => {
+                console.log(res)
+                commit('setUserInfo', res.data[0])
+
+            }).catch((error) => {
+                console.log(error,dataSite.requestUrl + '/auth/login')
+                commit('setUserError',{
+                    title: error.message,
+                    code: error.status,
+                    desc: error.response.data.message,
+                    type: 'error',
+                    status: true
+                })
             })
         }
     },
-    modules: {}
+    modules: {userError}
 
 }
-export default users
+export default user
