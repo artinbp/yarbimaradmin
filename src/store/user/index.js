@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dataSite  from '@/config'
 import userError from './error'
+import route from '@/router';
 const token = sessionStorage.getItem('token')
 const user = {
     state: {
@@ -36,8 +37,8 @@ const user = {
         }
     },
     actions: {
-        generateUserLogin: ({ commit }, data) => {
-            axios.post(dataSite.requestUrl + '/auth/login', data, {
+        generateUserLogin: async ({ commit }, data) => {
+           await axios.post(dataSite.requestUrl + '/auth/login', data, {
                 header: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': true,
@@ -51,6 +52,7 @@ const user = {
                 if (res.data.token){
                     commit('setUserToken', res.data.token)
                     sessionStorage.setItem('token', res.data.token)
+                    window.open(window.location.href.replace(route,'/'), '_self');
                 }
 
 

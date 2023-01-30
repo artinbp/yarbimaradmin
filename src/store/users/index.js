@@ -1,32 +1,42 @@
 import axios from 'axios';
 import dataSite  from '@/config'
 import usersError  from './error'
-const token = sessionStorage.getItem('token')
 
 const users = {
     state: {
-        users: []
+        users: [],
+        usersUpdateTemp:{
+            status:false,
+            data:{}
+        }
     },
     getters: {
         getUsers: (state) => {
             return state.users
+        },
+        getUsersUpdateTemp: (state) => {
+            return state.usersUpdateTemp
         }
     },
     mutations: {
         setUsers: (state, data) => {
             state.users = data
+        },
+        setUsersUpdateTemp: (state, data) => {
+            state.usersUpdateTemp = data
         }
     },
     actions: {
         appendUsers: ({commit},payload) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+            const token = sessionStorage.getItem('token')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token??sessionStorage.getItem('token');
             const config = {
                 header: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': true,
                     'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
                     'Access-Control-Allow-Headers': 'Content-Type',
-                    Authorization: 'Bearer ' + token,
+                    Authorization: 'Bearer ' + token??sessionStorage.getItem('token'),
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 }
@@ -43,20 +53,22 @@ const users = {
                 console.log(error)
             })
         },
-        generateUsers: ({ commit }) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        generateUsers: async ({ commit }) => {
+            const token = sessionStorage.getItem('token')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token??sessionStorage.getItem('token');
             const config = {
                 header: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': true,
                     'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
                     'Access-Control-Allow-Headers': 'Content-Type',
-                    Authorization: 'Bearer ' + token,
+                    Authorization: 'Bearer ' + token??sessionStorage.getItem('token'),
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 }
             }
-            axios.get(dataSite.requestUrl + '/dashboard/users?page=1', config).then((res) => {
+
+          await  axios.get(dataSite.requestUrl + '/dashboard/users?page=1', config).then((res) => {
                 console.log(res)
                 commit('setUsers', res.data.data.filter((item)=>item.role.name !== 'role_super_admin'))
             }).catch((error) => {
@@ -69,15 +81,75 @@ const users = {
                 console.log(error)
             })
         },
-        deleteUsers: ({commit},data) => {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        generateUpdateUsers: ({commit},data) => {
+            const token = sessionStorage.getItem('token')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token??sessionStorage.getItem('token');
             const config = {
                 header: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': true,
                     'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
                     'Access-Control-Allow-Headers': 'Content-Type',
-                    Authorization: 'Bearer ' + token,
+                    Authorization: 'Bearer ' + token??sessionStorage.getItem('token'),
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            axios.get(dataSite.requestUrl + '/dashboard/users/'+data, config).then((res) => {
+                console.log(res)
+                commit('setUsersUpdateTemp',{
+                    status:true,
+                    data:res.data
+                })
+            }).catch((error) => {
+                console.log(error)
+                commit('setUsersError',{
+                    title: error.response.data.message,
+                    desc: error.response.data.file,
+                    type: 'error',
+                    status: true
+                })
+            })
+
+        },
+        updateUsers: ({commit},data) => {
+            const token = sessionStorage.getItem('token')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token??sessionStorage.getItem('token');
+            const config = {
+                header: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    Authorization: 'Bearer ' + token??sessionStorage.getItem('token'),
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+            axios.patch(dataSite.requestUrl + '/dashboard/users/'+data, config).then((res) => {
+                console.log(res)
+            }).catch((error) => {
+                console.log(error)
+                commit('setUsersError',{
+                    title: error.response.data.message,
+                    desc: error.response.data.file,
+                    type: 'error',
+                    status: true
+                })
+            })
+
+        },
+        deleteUsers: ({commit},data) => {
+            const token = sessionStorage.getItem('token')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token??sessionStorage.getItem('token');
+            const config = {
+                header: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    Authorization: 'Bearer ' + token??sessionStorage.getItem('token'),
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 }
@@ -94,8 +166,13 @@ const users = {
                 })
             })
 
+        },
+        getAddress: ({commit}) => {
+            
         }
+        
     },
+
     modules: {usersError}
 }
 export default users

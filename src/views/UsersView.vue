@@ -1,13 +1,15 @@
 <script setup>
-import { useRoute } from 'vue-router';
+
 import VueIcon from '@/components/output/vueIcon';
-import { arrow } from '@/assets/icon/icon';
+import { arrow, editIcon, deleteIcon } from '@/assets/icon/icon';
 import router from '@/router';
 import { computed, onMounted } from 'vue';
 import store from '@/store';
 import SetUser from '@/components/templates/setUser'
+import EditUser from '@/components/templates/editUser'
 import ErrorPopUp from '@/components/output/errors/errorPopUp'
-const route = useRoute()
+import { roles } from '@/context/roles';
+
 const users = computed(() => store.getters.getUsers)
 onMounted(() => {
   if (users.value.length === 0) {
@@ -20,26 +22,30 @@ const deleteUser = (e) => {
   })
 }
 
+const editUser = (e) => {
+  store.dispatch('generateUpdateUsers',e)
+
+}
 let usersError = computed(() => store.getters.getUsersError)
 const closer = () => {
   store.commit('setUsersError', {status:false})
 }
 </script>
 <template>
+      <EditUser></EditUser>
   <error-pop-up :action="closer" v-if="usersError?.desc" :later="usersError.status" :title="usersError.title"  :type="usersError.type" :desc="usersError.desc"/>
   <nav class="flex flex-row justify-between items-center px-8 p-4 bg-slate-600">
     <button @click="router.go(-1)" class="bg-slate-800 p-2 self-start rounded-lg shrink-0">
       <vue-icon :path="arrow" width="30" height="23" class="stroke-cyan-50" viewBox="0 0 30 23"/>
     </button>
     <div class="flex px-4 gap-4 flex-row-reverse ">
-      <p class="text-blue-50 text-xl">{{ route.name }} management</p>
+      <p class="text-blue-50 text-xl">مدیریت کاربران</p>
       <set-user/>
     </div>
   </nav>
   <div class="p-8">
-
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <table class="w-full rtl text-s text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="p-4">
@@ -48,25 +54,25 @@ const closer = () => {
             </div>
           </th>
           <th scope="col" class="px-6 py-3">
-            username
+            نام کاربری
           </th>
           <th scope="col" class="px-6 py-3">
-            full name
+            نام کامل
           </th>
           <th scope="col" class="px-6 py-3">
-            email
+            پست الکترونیکی
           </th>
           <th scope="col" class="px-6 py-3">
-            role
+            سطح دسترسی
           </th>
           <th scope="col" class="px-6 py-3">
-            updated at
+            تقییر داده شد در
           </th>
           <th scope="col" class="px-6 py-3">
-            created at
+            ساخته شد در
           </th>
           <th scope="col" class="px-6 py-3">
-            Action
+            عملیات ها
           </th>
         </tr>
         </thead>
@@ -87,7 +93,7 @@ const closer = () => {
             {{ user.email }}
           </td>
           <td class="px-6 py-4">
-            {{ user.role.name }}
+            {{ roles.filter((item)=>item.value===user.role.name)[0].name }}
           </td>
           <td class="px-6 py-4">
             {{ new Date(user.updated_at).toString().split(' ').slice(0,6).join(' ') }}
@@ -95,8 +101,11 @@ const closer = () => {
           <td class="px-6 py-4">
             {{ new Date(user.created_at).toString().split(' ').slice(0,6).join(' ') }}
           </td>
-          <td class="px-6 py-4">
-            <button @click="deleteUser(user.id)" class="font-medium text-blue-600 dark:text-red-500 hover:underline">delete</button>
+          <td class="px-6 py-4 flex flex-row gap-2">
+            <button @click="editUser(user.id)" class="font-medium text-red-500 p-2 bg-blue-400 rounded-lg dark:text-red-500  hover:underline"> <vue-icon :path="editIcon" width="20" height="20" class="stroke-cyan-50" viewBox="0 0 20 20"/>
+            </button>
+            <button @click="deleteUser(user.id)" class="font-medium text-red-500 p-2 bg-red-200 rounded-lg dark:text-red-500 hover:underline"> <vue-icon :path="deleteIcon" width="20" height="20" class="stroke-red-500" viewBox="0 0 20 20"/>
+            </button>
           </td>
         </tr>
         </tbody>
