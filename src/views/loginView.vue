@@ -28,16 +28,9 @@ import { useRouter } from 'vue-router';
 const username = ref()
 const password = ref()
 const router = useRouter()
-const login = () => {
-  store.dispatch('generateUserLogin',{email: username.value, password: password.value}).then(()=> {
-router.push({path: '/' })
-  })
-  try {
-  router.push({path: '/' }).catch((reason)=>{
-    console.log(reason)});
-  }catch (e){
-    console.log(e)
-  }
+const login = async () => {
+  await store.dispatch('generateUserLogin',{email: username.value, password: password.value})
+  await router.push({path: '/' })
 }
 </script>
 

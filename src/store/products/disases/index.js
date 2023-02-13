@@ -1,34 +1,34 @@
 import axios from 'axios';
 import dataSite  from '@/config'
-import productsError  from './error'
+import disasesError  from './error'
 const token = sessionStorage.getItem('token')
 
-const products = {
+const disases = {
     state: {
-        products: [],
-        productsUpdateTemp: {
+        disases: [],
+        disasesUpdateTemp: {
             status: false,
             data: {}
         }
     },
     getters: {
-        getProducts: (state) => {
-            return state.products
+        getDisases: (state) => {
+            return state.disases
         },
-        getProductsUpdateTemp: (state) => {
-            return state.productsUpdateTemp
+        getDisasesUpdateTemp: (state) => {
+            return state.disasesUpdateTemp
         }
     },
     mutations: {
-        setProducts: (state, data) => {
-            state.products = data
+        setDisases: (state, data) => {
+            state.disases = data
         },
-        setProductsUpdateTemp: (state, data) => {
-            state.productsUpdateTemp = data
+        setDisasesUpdateTemp: (state, data) => {
+            state.disasesUpdateTemp = data
         }
     },
     actions: {
-        appendProducts: ({commit},payload) => {
+        appendDisases: ({commit},payload) => {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             const config = {
                 header: {
@@ -44,7 +44,7 @@ const products = {
             axios.post(dataSite.requestUrl + '/dashboard/products',payload, config).then((res) => {
                 console.log(res)
             }).catch((error) => {
-                commit('setProductsError',{
+                commit('setDisasesError',{
                     title: error.response.data.message,
                     desc: error.response.data.file,
                     type: 'error',
@@ -53,7 +53,7 @@ const products = {
                 console.log(error)
             })
         },
-        generateProducts: ({ commit }) => {
+        generateDisases: ({ commit }) => {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             const config = {
                 header: {
@@ -68,9 +68,9 @@ const products = {
             }
             axios.get(dataSite.requestUrl + '/dashboard/products?page=1', config).then((res) => {
                 console.log(res)
-                commit('setProducts', res.data.data)
+                commit('setProducts', res.data)
             }).catch((error) => {
-                commit('setProductsError',{
+                commit('setDisasesError',{
                     title: error.response.data.message,
                     desc: error.response.data.file,
                     type: 'error',
@@ -79,63 +79,7 @@ const products = {
                 console.log(error)
             })
         },
-        generateUpdateProducts: ({ commit }, data) => {
-            const token = sessionStorage.getItem('token')
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token ?? sessionStorage.getItem('token');
-            const config = {
-                header: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': true,
-                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }
-            axios.get(dataSite.requestUrl + '/dashboard/products/' + data, config).then((res) => {
-                console.log(res)
-                commit('setProductsUpdateTemp', {
-                    status: true,
-                    data: res.data
-                })
-            }).catch((error) => {
-                console.log(error)
-                commit('setProductsError', {
-                    title: error.response.data.message,
-                    desc: error.response.data.file,
-                    type: 'error',
-                    status: true
-                })
-            })
-
-        },
-        updateProducts: async ({ commit }, data) => {
-            const token = sessionStorage.getItem('token')
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token ?? sessionStorage.getItem('token');
-            const config = {
-                header: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': true,
-                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            }
-            await axios.patch(dataSite.requestUrl + '/dashboard/products/' + data.id, data, config).then((res) => {
-                console.log(res)
-            }).catch((error) => {
-                console.log(error)
-                commit('setProductsError', {
-                    title: error.response.data.message,
-                    desc: error.response.data.file,
-                    type: 'error',
-                    status: true
-                })
-            })
-
-        },
-        deleteProducts: ({commit},data) => {
+        deleteDisases: ({commit},data) => {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             const config = {
                 header: {
@@ -152,7 +96,7 @@ const products = {
                 console.log(res)
             }).catch((error) => {
                 console.log(error)
-                commit('setProductsError',{
+                commit('setDisasesError',{
                     title: error.response.data.message,
                     desc: error.response.data.file,
                     type: 'error',
@@ -162,6 +106,6 @@ const products = {
 
         }
     },
-    modules: {productsError}
+    modules: {disasesError}
 }
-export default products
+export default disases

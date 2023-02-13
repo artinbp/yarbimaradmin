@@ -5,7 +5,7 @@ import { arrow } from '@/assets/icon/icon';
 import router from '@/router';
 import { computed, onMounted } from 'vue';
 import store from '@/store';
-import SetCategory from '@/components/templates/seCategory'
+import SetCategory from '@/components/templates/setCategory'
 import ErrorPopUp from '@/components/output/errors/errorPopUp'
 
 

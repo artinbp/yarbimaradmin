@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dataSite  from '@/config'
+import address  from './address'
 import usersError  from './error'
 
 const users = {
@@ -113,7 +114,7 @@ const users = {
             })
 
         },
-        updateUsers: ({commit},data) => {
+        updateUsers: async({commit},data) => {
             const token = sessionStorage.getItem('token')
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token??sessionStorage.getItem('token');
             const config = {
@@ -127,7 +128,7 @@ const users = {
                     'Content-Type': 'application/json'
                 }
             }
-            axios.patch(dataSite.requestUrl + '/dashboard/users/'+data, config).then((res) => {
+            await axios.patch(dataSite.requestUrl + '/dashboard/users/'+data.id,data.data, config).then((res) => {
                 console.log(res)
             }).catch((error) => {
                 console.log(error)
@@ -166,13 +167,9 @@ const users = {
                 })
             })
 
-        },
-        getAddress: ({commit}) => {
-            
         }
-        
     },
 
-    modules: {usersError}
+    modules: {usersError,address}
 }
 export default users

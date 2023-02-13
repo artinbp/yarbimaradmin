@@ -1,22 +1,23 @@
 <script setup>
-import { useRoute } from 'vue-router';
-import VueIcon from '@/components/output/vueIcon';
-import { arrow } from '@/assets/icon/icon';
-import router from '@/router';
-import { computed, onMounted } from 'vue';
-import store from '@/store';
-import SetCategory from '@/components/templates/seCategory'
+import VueIcon from '@/components/output/vueIcon'
+import { arrow, deleteIcon, editIcon } from '@/assets/icon/icon'
+import router from '@/router'
+import { computed, onMounted } from 'vue'
+import {toJalali} from '@/utils'
+import store from '@/store'
+import SetCategory from '@/components/templates/setCategory'
 import ErrorPopUp from '@/components/output/errors/errorPopUp'
 
-
-const route = useRoute()
-const categories = computed(() => store.getters.getCategories)
+const products = computed(() => store.getters.getProducts)
 onMounted(() => {
-  if (categories.value.length === 0) {
-    store.dispatch('generateCategories')
+  if (products.value) {
+    store.dispatch('generateProducts')
   }
 })
-const deleteUser = (e) => {
+const editProducts = (e) => {
+  store.dispatch('generateUpdateProducts', e)
+}
+const deleteProducts = (e) => {
   store.dispatch('deleteCategories', e).then(() => {
     store.dispatch('generateCategories')
   })
@@ -35,7 +36,7 @@ const closer = () => {
       <vue-icon :path="arrow" width="30" height="23" class="stroke-cyan-50" viewBox="0 0 30 23"/>
     </button>
     <div class="flex px-4 gap-4 flex-row-reverse ">
-      <p class="text-blue-50 text-xl">{{ route.name }} management</p>
+      <p class="text-blue-50 text-xl">مدیریت محصول</p>
       <set-category/>
 
     </div>
@@ -43,7 +44,7 @@ const closer = () => {
   <div class="p-8">
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <table class="w-full text-sm rtl text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="p-4">
@@ -52,69 +53,78 @@ const closer = () => {
             </div>
           </th>
           <th scope="col" class="px-6 py-3">
-            title
+            عکس
           </th>
           <th scope="col" class="px-6 py-3">
-            description
+            عنوان
           </th>
           <th scope="col" class="px-6 py-3">
-            parent id
+            توضیحات
           </th>
           <th scope="col" class="px-6 py-3">
-            disabled
+            برند
           </th>
           <th scope="col" class="px-6 py-3">
-            depth
+           تعداد
           </th>
           <th scope="col" class="px-6 py-3">
-            count of children
+            قیمت
           </th>
           <th scope="col" class="px-6 py-3">
-            updated at
+           سایز
           </th>
           <th scope="col" class="px-6 py-3">
-            created at
+            بروز شده در
           </th>
           <th scope="col" class="px-6 py-3">
-            Action
+            ساخته شده در
+          </th>
+          <th scope="col" class="px-6 py-3">
+            عملیات
           </th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(category, i) in categories" :key="i"
+        <tr v-for="(pro, i) in products" :key="i"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
           <td class="w-4 p-4">
             <div class="flex items-center">
-              <label class="">{{ category?.id }}</label>
+              <label class="">{{ i+1 }}</label>
             </div>
           </td>
           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ category?.title }}
+            <img class="w-12 h-12" :src="pro?.thumbnail_url" alt="">
+          </th>
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            {{ pro?.title }}
           </th>
           <th scope="row" class="px-6 py-4 ">
-            {{ category?.description }}
+            {{ pro?.description }}
           </th>
           <td class="px-6 py-4">
-            {{ category?.parent_id??'no have' }}
+            {{ pro?.brand??'no have' }}
           </td>
           <td class="px-6 py-4">
-            {{ category?.disabled }}
+            {{ pro?.stock }}
           </td>
           <td class="px-6 py-4">
-            {{ category?.depth ||'no have'  }}
+            {{ pro?.price ||'no have'  }}
           </td>
           <td class="px-6 py-4">
-            {{ category?.children_recursive.length || 'no have'  }}
+            {{ pro?.size || 'no have'  }}
           </td>
           <td class="px-6 py-4">
-            {{ new Date(category?.updated_at).toString().split(' ').slice(0, 6).join(' ') }}
+            {{ toJalali(pro?.updated_at) }}
           </td>
           <td class="px-6 py-4">
-            {{ new Date(category?.created_at).toString().split(' ').slice(0, 6).join(' ') }}
+            {{ toJalali(pro?.created_at) }}
           </td>
-          <td class="px-6 py-4">
-            <button @click="deleteUser(category?.id)" class="font-medium text-blue-600 dark:text-red-500 hover:underline">
-              delete
+          <td class="px-6 py-4 flex flex-row gap-2">
+            <button @click="editProducts(pro.id)" class="font-medium text-red-500 p-2 bg-blue-400 rounded-lg dark:text-red-500  hover:underline"> <vue-icon :path="editIcon" width="20" height="20" class="stroke-cyan-50" viewBox="0 0 20 20"/>
+            </button>
+            <button @click="router.push('/users/address/'+pro.id)" class="font-medium p-2 bg-emerald-400 rounded-lg  hover:underline"> <vue-icon :path="locationIcon" width="20" height="20" class="stroke-emerald-200" viewBox="0 0 20 20"/>
+            </button>
+            <button @click="deleteProducts(pro.id)" class="font-medium text-red-500 p-2 bg-red-200 rounded-lg dark:text-red-500 hover:underline"> <vue-icon :path="deleteIcon" width="20" height="20" class="stroke-red-500" viewBox="0 0 20 20"/>
             </button>
           </td>
         </tr>

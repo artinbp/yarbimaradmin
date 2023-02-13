@@ -1,22 +1,26 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { arrow, editIcon, deleteIcon } from '@/assets/icon/icon';
 import VueIcon from '@/components/output/vueIcon';
-import { arrow } from '@/assets/icon/icon';
 import router from '@/router';
 import { computed, onMounted } from 'vue';
 import store from '@/store';
-import SetCategory from '@/components/templates/seCategory'
+import SetCategory from '@/components/templates/setCategory'
 import ErrorPopUp from '@/components/output/errors/errorPopUp'
+import EditCategory from '@/components/templates/editCategory';
+import {toJalali} from '@/utils';
 
 
-const route = useRoute()
 const categories = computed(() => store.getters.getCategories)
 onMounted(() => {
-  if (categories.value.length === 0) {
+  if (categories.value) {
     store.dispatch('generateCategories')
   }
 })
-const deleteUser = (e) => {
+const editCategories = (e) => {
+  store.dispatch('generateUpdateCategories',e)
+
+}
+const deleteCategories = (e) => {
   store.dispatch('deleteCategories', e).then(() => {
     store.dispatch('generateCategories')
   })
@@ -28,6 +32,7 @@ const closer = () => {
 }
 </script>
 <template>
+  <edit-category></edit-category>
   <error-pop-up :action="closer" v-if="usersError?.desc" :later="usersError.status" :title="usersError.title"
                 :type="usersError.type" :desc="usersError.desc"/>
   <nav class="flex flex-row justify-between items-center px-8 p-4 bg-slate-600">
@@ -35,7 +40,7 @@ const closer = () => {
       <vue-icon :path="arrow" width="30" height="23" class="stroke-cyan-50" viewBox="0 0 30 23"/>
     </button>
     <div class="flex px-4 gap-4 flex-row-reverse ">
-      <p class="text-blue-50 text-xl">{{ route.name }} management</p>
+      <p class="text-blue-50 text-xl">مدیریت دسته بندی ها</p>
       <set-category/>
 
     </div>
@@ -43,7 +48,7 @@ const closer = () => {
   <div class="p-8">
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <table class="w-full rtl text-sm text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="p-4">
@@ -52,31 +57,31 @@ const closer = () => {
             </div>
           </th>
           <th scope="col" class="px-6 py-3">
-            title
+            عنوان
           </th>
           <th scope="col" class="px-6 py-3">
-            description
+            توضیحات
           </th>
           <th scope="col" class="px-6 py-3">
-            parent id
+            والد
           </th>
           <th scope="col" class="px-6 py-3">
-            disabled
+            وضعیت
           </th>
           <th scope="col" class="px-6 py-3">
-            depth
+            عمق
           </th>
           <th scope="col" class="px-6 py-3">
-            count of children
+            تعداد فرزند
           </th>
           <th scope="col" class="px-6 py-3">
-            updated at
+            بروز شده در
           </th>
           <th scope="col" class="px-6 py-3">
-            created at
+            ساخته شده در
           </th>
           <th scope="col" class="px-6 py-3">
-            Action
+            عملیات ها
           </th>
         </tr>
         </thead>
@@ -98,23 +103,24 @@ const closer = () => {
             {{ category?.parent_id??'no have' }}
           </td>
           <td class="px-6 py-4">
-            {{ category?.disabled }}
+            {{ category?.disabled?'غیر فعال':'فعال' }}
           </td>
           <td class="px-6 py-4">
-            {{ category?.depth ||'no have'  }}
+            {{ category?.depth ||'ندارد'  }}
           </td>
           <td class="px-6 py-4">
-            {{ category?.children_recursive.length || 'no have'  }}
+            {{ category?.children_recursive.length || 'ندارد'  }}
           </td>
           <td class="px-6 py-4">
-            {{ new Date(category?.updated_at).toString().split(' ').slice(0, 6).join(' ') }}
+            {{ toJalali(category?.updated_at) }}
           </td>
           <td class="px-6 py-4">
-            {{ new Date(category?.created_at).toString().split(' ').slice(0, 6).join(' ') }}
+            {{ toJalali(category?.created_at) }}
           </td>
-          <td class="px-6 py-4">
-            <button @click="deleteUser(category?.id)" class="font-medium text-blue-600 dark:text-red-500 hover:underline">
-              delete
+          <td class="px-6 py-4 flex flex-row gap-2">
+            <button @click="editCategories(category.id)" class="font-medium text-red-500 p-2 bg-blue-400 rounded-lg dark:text-red-500  hover:underline"> <vue-icon :path="editIcon" width="20" height="20" class="stroke-cyan-50" viewBox="0 0 20 20"/>
+            </button>
+            <button @click="deleteCategories(category.id)" class="font-medium text-red-500 p-2 bg-red-200 rounded-lg dark:text-red-500 hover:underline"> <vue-icon :path="deleteIcon" width="20" height="20" class="stroke-red-500" viewBox="0 0 20 20"/>
             </button>
           </td>
         </tr>

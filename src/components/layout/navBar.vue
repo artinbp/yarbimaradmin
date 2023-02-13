@@ -11,10 +11,10 @@ const toggleProto = ref(false)
 const close = () => {
   store.commit('setUserError',{status:false})
 }
-const logout = () => {
-  store.dispatch('generateUserlogOut',{status:false})
-  sessionStorage.removeItem('token')
-  window.location.reload()
+const logout = async () => {
+  await store.dispatch('generateUserlogOut',{status:false})
+  await sessionStorage.removeItem('token')
+  await window.location.reload()
 }
 
 </script>

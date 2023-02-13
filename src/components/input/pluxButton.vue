@@ -10,6 +10,9 @@ const props = defineProps({
   type:{
     default: 'square'
   },
+  toggle:{
+    default: false
+  },
   class:{
     default: ''
   }
@@ -33,7 +36,8 @@ switch (props.color) {
   classType.value = 'bg-disable text-white rounded-md cursor-default'
   break
 }
-const btnToggle = ref(false)
+const btnToggle = ref(props.toggle)
+
 const action = (e) => {
   emit('action', e, btnToggle.value)
 }

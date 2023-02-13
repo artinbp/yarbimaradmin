@@ -3904,6 +3904,11 @@
   "resolved" "https://registry.npmmirror.com/isobject/-/isobject-3.0.1.tgz"
   "version" "3.0.1"
 
+"jalali-date@^1.1.4":
+  "integrity" "sha512-uahw/VGFvy5LntCrbeTkCrxtH9J2pxkjvb4TQtsM7PjkMBR1otpaYJkX7PCF5GfVkMP1hTI3CdQw0TAtEs3g1A=="
+  "resolved" "https://registry.npmjs.org/jalali-date/-/jalali-date-1.1.4.tgz"
+  "version" "1.1.4"
+
 "javascript-stringify@^2.0.1":
   "integrity" "sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg=="
   "resolved" "https://registry.npmmirror.com/javascript-stringify/-/javascript-stringify-2.1.0.tgz"

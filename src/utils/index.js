@@ -1,5 +1,5 @@
 import router from '@/router';
-
+import jDate from 'jalali-date'
 export const mailValidate = (e) => {
     // const { t } = useI18n()
     if (!e) {
@@ -48,4 +48,8 @@ export const device = () => {
     if (window.innerWidth >= 1024) router.push('/')
     if (window.innerWidth <= 768 && window.innerWidth >= 425) router.push('/t')
     if (window.innerWidth >= 320 && window.innerWidth <= 425) router.push('/m')
+}
+export const toJalali = (e) => {
+    const date = new jDate(new Date(e))
+    return date.format('dddd DD MMMM YYYY') + `${new Date(e).getHours()}:${new Date(e).getMinutes()}:${new Date(e).getSeconds()}`
 }

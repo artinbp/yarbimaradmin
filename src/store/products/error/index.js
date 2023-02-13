@@ -1,7 +1,7 @@
 
-const categoriesError = {
+const productsError = {
     state: {
-        categoriesError:{
+        productsError:{
             title: '',
             desc: '',
             type: '',
@@ -9,13 +9,13 @@ const categoriesError = {
         }
     },
     getters: {
-        getCategoriesError: (state) => {
-            return state.categoriesError
+        getProductsError: (state) => {
+            return state.productsError
         }
     },
     mutations: {
-        setCategoriesError: (state, data) => {
-            state.categoriesError = data
+        setProductsError: (state, data) => {
+            state.productsError = data
         }
     },
     actions: {
@@ -23,4 +23,4 @@ const categoriesError = {
     modules: {}
 
 }
-export default categoriesError
+export default productsError

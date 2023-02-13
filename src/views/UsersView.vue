@@ -1,7 +1,7 @@
 <script setup>
 
 import VueIcon from '@/components/output/vueIcon';
-import { arrow, editIcon, deleteIcon } from '@/assets/icon/icon';
+import { arrow, editIcon, deleteIcon, locationIcon } from '@/assets/icon/icon';
 import router from '@/router';
 import { computed, onMounted } from 'vue';
 import store from '@/store';
@@ -9,6 +9,7 @@ import SetUser from '@/components/templates/setUser'
 import EditUser from '@/components/templates/editUser'
 import ErrorPopUp from '@/components/output/errors/errorPopUp'
 import { roles } from '@/context/roles';
+import {toJalali} from '@/utils';
 
 const users = computed(() => store.getters.getUsers)
 onMounted(() => {
@@ -96,13 +97,15 @@ const closer = () => {
             {{ roles.filter((item)=>item.value===user.role.name)[0].name }}
           </td>
           <td class="px-6 py-4">
-            {{ new Date(user.updated_at).toString().split(' ').slice(0,6).join(' ') }}
+            {{ toJalali(user?.updated_at) }}
           </td>
           <td class="px-6 py-4">
-            {{ new Date(user.created_at).toString().split(' ').slice(0,6).join(' ') }}
+            {{ toJalali(user?.created_at) }}
           </td>
           <td class="px-6 py-4 flex flex-row gap-2">
             <button @click="editUser(user.id)" class="font-medium text-red-500 p-2 bg-blue-400 rounded-lg dark:text-red-500  hover:underline"> <vue-icon :path="editIcon" width="20" height="20" class="stroke-cyan-50" viewBox="0 0 20 20"/>
+            </button>
+            <button @click="router.push('/users/address/'+user.id)" class="font-medium p-2 bg-emerald-400 rounded-lg  hover:underline"> <vue-icon :path="locationIcon" width="20" height="20" class="stroke-emerald-200" viewBox="0 0 20 20"/>
             </button>
             <button @click="deleteUser(user.id)" class="font-medium text-red-500 p-2 bg-red-200 rounded-lg dark:text-red-500 hover:underline"> <vue-icon :path="deleteIcon" width="20" height="20" class="stroke-red-500" viewBox="0 0 20 20"/>
             </button>
