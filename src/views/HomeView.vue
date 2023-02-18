@@ -9,9 +9,9 @@
         <vue-icon :path="category" width="100" height="100" class="stroke-cyan-50" viewBox="0 0 86 89" fill="none" />
         <p class=" text-2xl text-blue-50 whitespace-pre-wrap hover:text-blue-600">مدیریت دسته بندی</p>
       </router-link>
-      <router-link to="/media" class="flex backdrop-blur-2xl w-[240px] flex-row items-center gap-6 h-fit rounded-2xl p-4 bg-slate-600">
-        <vue-icon :path="mediaIcon" width="100" height="100" class="stroke-cyan-50" viewBox="0 0 20 20" fill="none" />
-        <p class=" text-2xl text-blue-50 whitespace-pre-wrap hover:text-blue-600">مدیریت رسانه ها</p>
+      <router-link to="/diseases" class="flex backdrop-blur-2xl w-[240px] flex-row items-center gap-6 h-fit rounded-2xl p-4 bg-slate-600">
+        <vue-icon :path="disasesIcon" width="100" height="100" class="stroke-cyan-50" viewBox="0 0 48 48" fill="none" />
+        <p class=" text-2xl text-blue-50 whitespace-pre-wrap hover:text-blue-600">مدیریت بیماری ها</p>
       </router-link>
       <router-link to="/products" class="flex backdrop-blur-2xl w-[240px] flex-row items-center gap-6 h-fit rounded-2xl p-4 bg-slate-600">
         <vue-icon :path="productsIcon" width="100" height="100" class="stroke-cyan-50" viewBox="0 0 20 20" fill="none" />
@@ -31,5 +31,5 @@
 
 <script setup>
 import VueIcon from '@/components/output/vueIcon';
-import {user,category,mediaIcon,productsIcon,ordersIcon,caroselIcon} from  '@/assets/icon/icon.js'
+import {user,category,disasesIcon,productsIcon,ordersIcon,caroselIcon} from  '@/assets/icon/icon.js'
 </script>

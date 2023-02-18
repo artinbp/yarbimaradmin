@@ -55,7 +55,21 @@ const routes = [
                 // this generates a separate chunk (about.[hash].js) for this route
                 // which is lazy-loaded when the route is visited.
                 component: () => import(/* webpackChunkName: "about" */ '../views/productsView')
-            }, {
+            },{
+                path: 'diseases',
+                name: 'diseases',
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: () => import(/* webpackChunkName: "about" */ '../views/disasesView')
+            },{
+                path: 'slides',
+                name: 'slides',
+                // route level code-splitting
+                // this generates a separate chunk (about.[hash].js) for this route
+                // which is lazy-loaded when the route is visited.
+                component: () => import(/* webpackChunkName: "about" */ '../views/crocialView')
+            },{
                 path: 'login',
                 name: 'login',
                 // route level code-splitting

@@ -1,7 +1,7 @@
 
-const categoriesError = {
+const slidesError = {
     state: {
-        categoriesError:{
+        slidesError:{
             title: '',
             desc: '',
             type: '',
@@ -9,13 +9,13 @@ const categoriesError = {
         }
     },
     getters: {
-        getCategoriesError: (state) => {
-            return state.categoriesError
+        getSlidesError: (state) => {
+            return state.slidesError
         }
     },
     mutations: {
-        setCategoriesError: (state, data) => {
-            state.categoriesError = data
+        setSlidesError: (state, data) => {
+            state.slidesError = data
         }
     },
     actions: {
@@ -23,4 +23,4 @@ const categoriesError = {
     modules: {}
 
 }
-export default categoriesError
+export default slidesError

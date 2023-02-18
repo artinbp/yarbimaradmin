@@ -1,7 +1,7 @@
 
-const categoriesError = {
+const mediaError = {
     state: {
-        categoriesError:{
+        mediaError:{
             title: '',
             desc: '',
             type: '',
@@ -9,13 +9,13 @@ const categoriesError = {
         }
     },
     getters: {
-        getCategoriesError: (state) => {
-            return state.categoriesError
+        getMediaError: (state) => {
+            return state.mediaError
         }
     },
     mutations: {
-        setCategoriesError: (state, data) => {
-            state.categoriesError = data
+        setMediaError: (state, data) => {
+            state.mediaError = data
         }
     },
     actions: {
@@ -23,4 +23,4 @@ const categoriesError = {
     modules: {}
 
 }
-export default categoriesError
+export default mediaError

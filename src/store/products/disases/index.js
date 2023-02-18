@@ -1,34 +1,35 @@
 import axios from 'axios';
-import dataSite  from '@/config'
-import disasesError  from './error'
+import dataSite from '@/config'
+import diseasesError from './error'
+
 const token = sessionStorage.getItem('token')
 
-const disases = {
+const diseases = {
     state: {
-        disases: [],
-        disasesUpdateTemp: {
+        diseases: [],
+        diseasesUpdateTemp: {
             status: false,
             data: {}
         }
     },
     getters: {
-        getDisases: (state) => {
-            return state.disases
+        getDiseases: (state) => {
+            return state.diseases
         },
-        getDisasesUpdateTemp: (state) => {
-            return state.disasesUpdateTemp
+        getDiseasesUpdateTemp: (state) => {
+            return state.diseasesUpdateTemp
         }
     },
     mutations: {
-        setDisases: (state, data) => {
-            state.disases = data
+        setDiseases: (state, data) => {
+            state.diseases = data
         },
-        setDisasesUpdateTemp: (state, data) => {
-            state.disasesUpdateTemp = data
+        setDiseasesUpdateTemp: (state, data) => {
+            state.diseasesUpdateTemp = data
         }
     },
     actions: {
-        appendDisases: ({commit},payload) => {
+        appendDiseases: ({commit},payload) => {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             const config = {
                 header: {
@@ -41,10 +42,10 @@ const disases = {
                     'Content-Type': 'application/json'
                 }
             }
-            axios.post(dataSite.requestUrl + '/dashboard/products',payload, config).then((res) => {
+            axios.post(dataSite.requestUrl + '/dashboard/diseases', payload, config).then((res) => {
                 console.log(res)
             }).catch((error) => {
-                commit('setDisasesError',{
+                commit('setDiseasesError',{
                     title: error.response.data.message,
                     desc: error.response.data.file,
                     type: 'error',
@@ -53,7 +54,7 @@ const disases = {
                 console.log(error)
             })
         },
-        generateDisases: ({ commit }) => {
+        generateDiseases: ({ commit }) => {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             const config = {
                 header: {
@@ -66,11 +67,11 @@ const disases = {
                     'Content-Type': 'application/json'
                 }
             }
-            axios.get(dataSite.requestUrl + '/dashboard/products?page=1', config).then((res) => {
+            axios.get(dataSite.requestUrl + '/dashboard/diseases?page=1', config).then((res) => {
                 console.log(res)
-                commit('setProducts', res.data)
+                commit('setDiseases', res.data.data)
             }).catch((error) => {
-                commit('setDisasesError',{
+                commit('setDiseasesError', {
                     title: error.response.data.message,
                     desc: error.response.data.file,
                     type: 'error',
@@ -79,7 +80,64 @@ const disases = {
                 console.log(error)
             })
         },
-        deleteDisases: ({commit},data) => {
+        generateUpdateDiseases: ({ commit }, data) => {
+            const token = sessionStorage.getItem('token')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token ?? sessionStorage.getItem('token');
+            const config = {
+                header: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            axios.get(dataSite.requestUrl + '/dashboard/diseases/' + data, config).then((res) => {
+                console.log(res)
+                commit('setDiseasesUpdateTemp', {
+                    status: true,
+                    data: res.data
+                })
+            }).catch((error) => {
+                console.log(error)
+                commit('setDiseasesError', {
+                    title: error.response.data.message,
+                    desc: error.response.data.file,
+                    type: 'error',
+                    status: true
+                })
+            })
+
+        },
+        updateDiseases: async ({ commit }, data) => {
+            const token = sessionStorage.getItem('token')
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token ?? sessionStorage.getItem('token');
+            const config = {
+                header: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': true,
+                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+            await axios.patch(dataSite.requestUrl + '/dashboard/diseases/' + data.id, data.data, config).then((res) => {
+                console.log(res)
+            }).catch((error) => {
+                console.log(error)
+                commit('setDiseasesError', {
+                    title: error.response.data.message,
+                    desc: error.response.data.file,
+                    type: 'error',
+                    status: true
+                })
+            })
+
+        },
+        deleteDiseases: ({ commit }, data) => {
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             const config = {
                 header: {
@@ -87,16 +145,15 @@ const disases = {
                     'Access-Control-Allow-Credentials': true,
                     'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
                     'Access-Control-Allow-Headers': 'Content-Type',
-                    Authorization: 'Bearer ' + token,
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 }
             }
-            axios.delete(dataSite.requestUrl + '/dashboard/products/'+data, config).then((res) => {
+            axios.delete(dataSite.requestUrl + '/dashboard/diseases/' + data, config).then((res) => {
                 console.log(res)
             }).catch((error) => {
                 console.log(error)
-                commit('setDisasesError',{
+                commit('setDiseasesError',{
                     title: error.response.data.message,
                     desc: error.response.data.file,
                     type: 'error',
@@ -106,6 +163,6 @@ const disases = {
 
         }
     },
-    modules: {disasesError}
+    modules: {diseasesError}
 }
-export default disases
+export default diseases

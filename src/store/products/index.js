@@ -2,7 +2,7 @@ import axios from 'axios';
 import dataSite  from '@/config'
 import productsError  from './error'
 const token = sessionStorage.getItem('token')
-
+import diseases from './disases'
 const products = {
     state: {
         products: [],
@@ -162,6 +162,6 @@ const products = {
 
         }
     },
-    modules: {productsError}
+    modules: {productsError,diseases}
 }
 export default products

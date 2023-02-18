@@ -6,30 +6,29 @@ import { computed, onMounted } from 'vue';
 import store from '@/store';
 import ErrorPopUp from '@/components/output/errors/errorPopUp'
 import {toJalali} from '@/utils';
-
+import SetDiseases from '@/components/templates/setDiseases';
 import EditDiseases from '@/components/templates/editDiseases';
-import SetSlides from '@/components/templates/setSlides';
 
 
-const rows = computed(() => store.getters.getSlides)
+const rows = computed(() => store.getters.getDiseases)
 onMounted(() => {
   if (rows.value) {
-    store.dispatch('generateSlides')
+    store.dispatch('generateDiseases')
   }
 })
 const edit = (e) => {
-  store.dispatch('generateUpdateSlides',e)
+  store.dispatch('generateUpdateDiseases',e)
 
 }
 const doDelete = (e) => {
-  store.dispatch('deleteSlides', e).then(() => {
-    store.dispatch('generateSlides')
+  store.dispatch('deleteDiseases', e).then(() => {
+    store.dispatch('generateDiseases')
   })
 }
 
-let Error = computed(() => store.getters.getSlidesError)
+let Error = computed(() => store.getters.getDiseasesError)
 const closer = () => {
-  store.commit('setSlidesUpdateTemp', { status: false })
+  store.commit('setDiseasesError', { status: false })
 }
 </script>
 <template>
@@ -41,8 +40,8 @@ const closer = () => {
       <vue-icon :path="arrow" width="30" height="23" class="stroke-cyan-50" viewBox="0 0 30 23"/>
     </button>
     <div class="flex px-4 gap-4 flex-row-reverse ">
-      <p class="text-blue-50 text-xl">مدیریت اسلاید ها</p>
-      <set-slides/>
+      <p class="text-blue-50 text-xl">مدیریت بیماری ها</p>
+      <set-diseases/>
 
     </div>
   </nav>
@@ -58,16 +57,7 @@ const closer = () => {
             </div>
           </th>
           <th scope="col" class="px-6 py-3">
-            تصویر
-          </th>
-          <th scope="col" class="px-6 py-3">
-            عنوان
-          </th>
-          <th scope="col" class="px-6 py-3">
-            توضیحات
-          </th>
-          <th scope="col" class="px-6 py-3">
-            پیوند به
+            نام بیماری
           </th>
           <th scope="col" class="px-6 py-3">
             بروز شده در
@@ -89,16 +79,7 @@ const closer = () => {
             </div>
           </td>
           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <img :src="row?.media.url" class="w-14 h-14 rounded-lg" alt="">
-          </th>
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ row?.title }}
-          </th>
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ row?.description }}
-          </th>
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <a :href="row?.url" :title="row.url">ادرس</a>
+            {{ row?.name }}
           </th>
           <td class="px-6 py-4">
             {{ toJalali(row?.updated_at) }}

@@ -1,12 +1,12 @@
 <script setup>
 import VueIcon from '@/components/output/vueIcon'
-import { arrow, deleteIcon, editIcon } from '@/assets/icon/icon'
+import { arrow, deleteIcon, infoIcon, editIcon } from '@/assets/icon/icon'
 import router from '@/router'
 import { computed, onMounted } from 'vue'
 import {toJalali} from '@/utils'
 import store from '@/store'
-import SetCategory from '@/components/templates/setCategory'
 import ErrorPopUp from '@/components/output/errors/errorPopUp'
+import SetProduct from '@/components/templates/setProduct';
 
 const products = computed(() => store.getters.getProducts)
 onMounted(() => {
@@ -18,15 +18,16 @@ const editProducts = (e) => {
   store.dispatch('generateUpdateProducts', e)
 }
 const deleteProducts = (e) => {
-  store.dispatch('deleteCategories', e).then(() => {
-    store.dispatch('generateCategories')
+  store.dispatch('deleteProducts', e).then(() => {
+    store.dispatch('generateProducts')
   })
 }
 
 let usersError = computed(() => store.getters.getCategoriesError)
 const closer = () => {
-  store.commit('setCategoriesError', { status: false })
+  store.commit('setProductsErrorTemp', { status: false })
 }
+
 </script>
 <template>
   <error-pop-up :action="closer" v-if="usersError?.desc" :later="usersError.status" :title="usersError.title"
@@ -37,7 +38,7 @@ const closer = () => {
     </button>
     <div class="flex px-4 gap-4 flex-row-reverse ">
       <p class="text-blue-50 text-xl">مدیریت محصول</p>
-      <set-category/>
+      <set-product/>
 
     </div>
   </nav>
@@ -122,7 +123,7 @@ const closer = () => {
           <td class="px-6 py-4 flex flex-row gap-2">
             <button @click="editProducts(pro.id)" class="font-medium text-red-500 p-2 bg-blue-400 rounded-lg dark:text-red-500  hover:underline"> <vue-icon :path="editIcon" width="20" height="20" class="stroke-cyan-50" viewBox="0 0 20 20"/>
             </button>
-            <button @click="router.push('/users/address/'+pro.id)" class="font-medium p-2 bg-emerald-400 rounded-lg  hover:underline"> <vue-icon :path="locationIcon" width="20" height="20" class="stroke-emerald-200" viewBox="0 0 20 20"/>
+            <button @click="router.push('/users/address/'+pro.id)" class="font-medium p-2 bg-emerald-400 rounded-lg  hover:underline"> <vue-icon :path="infoIcon" width="20" height="20" class="stroke-emerald-200" viewBox="0 0 20 20"/>
             </button>
             <button @click="deleteProducts(pro.id)" class="font-medium text-red-500 p-2 bg-red-200 rounded-lg dark:text-red-500 hover:underline"> <vue-icon :path="deleteIcon" width="20" height="20" class="stroke-red-500" viewBox="0 0 20 20"/>
             </button>

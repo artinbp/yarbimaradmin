@@ -1,7 +1,7 @@
 
-const disasesError = {
+const diseasesError = {
     state: {
-        disasesError:{
+        diseasesError:{
             title: '',
             desc: '',
             type: '',
@@ -9,13 +9,13 @@ const disasesError = {
         }
     },
     getters: {
-        getDisasesError: (state) => {
-            return state.disasesError
+        getDiseasesError: (state) => {
+            return state.diseasesError
         }
     },
     mutations: {
-        setDisasesError: (state, data) => {
-            state.disasesError = data
+        setDiseasesError: (state, data) => {
+            state.diseasesError = data
         }
     },
     actions: {
@@ -23,4 +23,4 @@ const disasesError = {
     modules: {}
 
 }
-export default disasesError
+export default diseasesError
