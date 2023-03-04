@@ -25,7 +25,7 @@
         </select>
       </div>
       <div class="mb-6">
-        <errors-inputs text="والد" for="parent" type="parent" :error="errors"/>
+        <errors-inputs text="وضعیت" for="parent" type="parent" :error="errors"/>
         <plux-button title="ویرایش دسته بندی" type="toggle" :toggle="!userData.disabled" color="primary" class="w-12" @action="toggle"></plux-button>
       </div>
       <plux-button title="ویرایش دسته بندی" type="square" color="none"

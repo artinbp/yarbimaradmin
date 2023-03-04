@@ -42,7 +42,7 @@
             </select>
           </div>
         </div>
-        <plux-button title="ثبت بیماری" type="square" color="none"
+        <plux-button title="ثبت محصول" type="square" color="none"
                      class="rounded-lg text-sm px-5 min-w-[5vw] py-2.5 text-center  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                      @action="append"></plux-button>
       </div>
